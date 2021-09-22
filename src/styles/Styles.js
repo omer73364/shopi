@@ -1,7 +1,7 @@
 import { Dimensions } from 'react-native'
 
 export const fonts = {
-    'regular':'Montserrat',
+    'regular':'',
     'italic':'MontserratItalic',
     'bold':'MontserratBold',
     'semibold':'MontserratSemiBold',

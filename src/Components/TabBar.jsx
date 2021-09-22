@@ -3,27 +3,49 @@ import { Ionicons } from '@expo/vector-icons';
 import { View, Pressable, Animated, StyleSheet } from 'react-native';
 import colors from '../styles/Colors';
 import { width } from '../styles/Styles';
+import { useStore } from '../Store';
 
 export default function MyTabBar({ state, descriptors, navigation }) {
+
+    const routeName = useStore(state=>state.routeName)
 
     // Top small bar animation
     const fromLeft = [25,50,75,100]
     const activePosition = React.useRef(new Animated.Value((width*(((state.index < 4 ? fromLeft[state.index] : 120)-12.5)/100)-11))).current;
+    const tabBarPosition = React.useRef(new Animated.Value(-56)).current;
 
     const setActivePosition = (value) => {
-      Animated.timing(activePosition, {
-        toValue: (width*((value-12.5)/100)-11),
-        duration: 400,
-        useNativeDriver:false
-      }).start();
+        Animated.timing(activePosition, {
+            toValue: (width*((value-12.5)/100)-11),
+            duration: 400,
+            useNativeDriver:false
+        }).start();
     };
+
+    const setTabBarPosition = (value) => {
+        Animated.timing(tabBarPosition, {
+          toValue: value,
+          duration: 400,
+          useNativeDriver:false
+        }).start();
+    };
+
+    const showTabBar = [
+        'Home',
+        'Cart',
+        'Saved',
+        'Products',
+        'Profile'
+    ]
 
     React.useEffect(()=>{
         setActivePosition((state.index < 4 ? fromLeft[state.index] : 120))
-    },[state])
+        setTabBarPosition((showTabBar.includes(routeName) ? -56 : 0))
+    },[state,routeName])
 
     return (
-        <View style={styles.tabBarContainer}>
+        <View style={{height:0}}>
+        <Animated.View style={[styles.tabBarContainer,{top: tabBarPosition}]}>
             {
                 state.routes.map((route, index) => {
                     const { options } = descriptors[route.key];
@@ -43,9 +65,15 @@ export default function MyTabBar({ state, descriptors, navigation }) {
                             canPreventDefault: true,
                         });
 
+                        const params = {}
+
+                        if(route.name === 'Saved'){
+                            params.title = 'Saved'
+                        }
+
                         if (!isFocused && !event.defaultPrevented) {
                             // The `merge: true` option makes sure that the params inside the tab screen are preserved
-                            navigation.navigate({ name: route.name, merge: true });
+                            navigation.navigate(route.name, params);
                         }
                     };
 
@@ -76,7 +104,7 @@ export default function MyTabBar({ state, descriptors, navigation }) {
                     }
 
                     return (
-                        <View key={index} style={{ flex: 1 }}>
+                        <View key={index} style={{ flex: 1, borderRadius:50 }}>
                             <Pressable
                                 testID={options.tabBarTestID}
                                 onPress={onPress}
@@ -94,6 +122,7 @@ export default function MyTabBar({ state, descriptors, navigation }) {
             {/* small animated bar on top of icon */}
             <Animated.View style={[styles.animatedTopBar,{left: activePosition}]}/> 
         
+        </Animated.View>
         </View>
     );
 }
@@ -102,7 +131,16 @@ const styles = StyleSheet.create({
     tabBarContainer:{ 
         flexDirection: 'row', 
         height:56,
-        backgroundColor:'#fff'
+        width:'100%',
+        backgroundColor:'#fff',
+        // borderTopRightRadius:14,
+        // borderTopLeftRadius:14,
+        overflow:'hidden',
+        position:'relative',
+        // top:-56
+        // elevation:12,
+        // borderTopWidth:1,
+        // borderColor:colors.gray+'4f'
     },
     tabBarIcon:{ 
         width:'100%', 
