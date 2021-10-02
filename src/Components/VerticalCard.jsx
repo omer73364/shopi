@@ -15,6 +15,7 @@ const VerticalCard = (props) => {
             img: require('../assets/imgs/1.jpg'),
             name: 'Name',
             price: "0",
+            background:'#eee',
             saved: false
         },
         lastItem = false,
@@ -25,9 +26,9 @@ const VerticalCard = (props) => {
     return (
         <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={horizontalMode ? tailwind(`ml-2 ${lastItem ? 'mr-4' : ''}`) : tailwind(`m-1 ${lastItem ? 'mr-5' : ''}`)}>
             <View style={[tailwind(`p-2 bg-white rounded-xl w-48 ${horizontalMode ? 'h-72' : 'h-60'}`),{elevation:0.1},!horizontalMode && {width:(width/2)-16}]}>
-                <Image source={item.img} resizeMode="cover" style={tailwind('w-full flex-1 rounded-xl')}/>
-                <View style={tailwind('mt-2 relative w-full h-14')}>
-                    <Text text={item.name} style={{...tailwind('text-lg font-bold'),color:colors.black}}/>
+                <Image source={item.img} resizeMode="cover" style={[tailwind('w-full flex-1 rounded-xl'),{backgroundColor:item.background}]}/>
+                <View style={tailwind('mt-2 px-2 relative w-full h-14')}>
+                    <Text text={item.name.length > 12 ? item.name.slice(0,12) + '..' : item.name} style={{...tailwind('text-lg font-bold'),color:colors.black}}/>
                     <Text text={`$${item.price}`} style={{...tailwind('text-base text-left'),color:colors.gray}}/>
                     <View style={[tailwind('w-8 h-8 absolute bottom-2 right-0 rounded-full items-center justify-center'),{elevation:5,backgroundColor:'#f35f41'}]}>
                         <Pressable 

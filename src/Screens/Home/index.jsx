@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Dimensions, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Dimensions, StyleSheet, ScrollView, ActivityIndicator, Animated } from 'react-native';
 import Constants from 'expo-constants';
 import colors from '../../styles/Colors';
 import tailwind from 'tailwind-rn'
@@ -9,6 +9,8 @@ import Title from '../../Components/Title';
 import ProductSlider from '../../Components/ProductSlider';
 import CollectionSlider from '../../Components/CollectionSlider';
 import { useStore } from '../../Store';
+import { fakeCollections, FakeProducts } from '../../constants';
+import HeadBar from '../../Components/HeadBar';
 
 const { width, height } = Dimensions.get('screen')
 
@@ -18,58 +20,19 @@ function HomeScreen({ navigation }) {
     navigation.navigate(route,params)
   }
 
-  const [newArrival, setNewArrival] = useState([
-    {
-      id:'0',
-      name: 'Name 1',
-      img: require('../../assets/imgs/3.jpg'),
-      price: "12",
-      saved: false
-    },
-    {
-      id:'1',
-      name: 'Name 2',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "20",
-      saved: true
-    },
-    {
-      id:'2',
-      name: 'Name 3',
-      img: require('../../assets/imgs/3.jpg'),
-      price: "39",
-      saved: true
-    },
-    {
-      id:'3',
-      name: 'Name 4',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "440",
-      saved: false
-    },
-  ])
-  const [collection, setCollection] = useState([
-    {
-      id:'0',
-      name: 'Name 1',
-      img: require('../../assets/imgs/3.jpg'),
-    },
-    {
-      id:'1',
-      name: 'Name 2',
-      img: require('../../assets/imgs/4.jpg'),
-    },
-    {
-      id:'2',
-      name: 'Name 3',
-      img: require('../../assets/imgs/3.jpg'),
-    },
-    {
-      id:'3',
-      name: 'Name 4',
-      img: require('../../assets/imgs/4.jpg'),
-    },
-  ])
+  const [newArrival, setNewArrival] = useState([])
+  const [collection, setCollection] = useState([])
+
+
+  const slideCards = React.useRef(new Animated.Value(-160)).current;
+
+  const setSlideCards = (value) => {
+    Animated.timing(slideCards, {
+        toValue: value,
+        duration: 300,
+        useNativeDriver:false
+    }).start();
+  };
 
   const setRoute = useStore(state=>state.setRoute)
   const Toast = useStore(state=>state.Toast)
@@ -85,9 +48,12 @@ function HomeScreen({ navigation }) {
   } 
 
   useEffect(()=>{
-    setLoading(true)
     setTimeout(() => {
-      setLoading(false)
+      setNewArrival(FakeProducts)
+      setSlideCards(0)
+      setTimeout(() => {
+        setCollection(fakeCollections)
+      }, 300);
     }, 500);
     const unsubscribe = navigation.addListener('focus', () => {
       setRoute('Home')
@@ -100,37 +66,30 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.screen}>
 
-      <View style={[tailwind('w-full flex-row px-4 pb-3 items-center justify-between'),{borderColor: colors.gray+'4f',borderBottomWidth:0.2}]}>
-        
-        <IconButton onPress={()=>{}}>
-          <Ionicons name="ios-menu" size={18} color={colors.black}/>
-        </IconButton>
-      
-        {/* <Text>Shopi</Text> */}
-
-        <IconButton>
-          <Ionicons name="ios-search" size={18} color={colors.black}/>
-        </IconButton>
-      
-      </View>
+      <HeadBar/>
 
       <ScrollView style={tailwind('pt-2')} showsVerticalScrollIndicator={false}>
-        {
-          loading ?
-          <ActivityIndicator size={32} color={colors.primary} style={[tailwind('items-center justify-center'),{height:height-200}]}/>
-          :
-          <>
-            <Title text="New Arrival" onPress={()=>navigate('Products',{title:'New Arrival'})}/>
-            <ProductSlider products={newArrival} save={saveProduct}/>
+          <Title text="New Arrival" onPress={()=>navigate('Products',{title:'New Arrival'})}/>
+          {
+            !newArrival.length
+            ? 
+            <ActivityIndicator size={32} color={colors.primary} style={tailwind('items-center h-72 justify-center')}/>
+            : 
+            <Animated.View style={[tailwind('w-full relative'),{right:slideCards}]}>
+              <ProductSlider products={newArrival} save={saveProduct}/>
+            </Animated.View>
+          }
 
-              <View style={tailwind('h-4')}/>
-            
-            <Title text="Collections" seeAll={false}/>
-            <CollectionSlider products={collection}/>
+            <View style={tailwind('h-4')}/>
+          
+          <Title text="Collections" seeAll={false}/>
+          {
+            !collection.length
+            ? <ActivityIndicator size={32} color={colors.primary} style={tailwind('items-center h-40 justify-center')}/>
+            : <CollectionSlider products={collection}/>
+          }
 
-              <View style={tailwind('h-20')}/>
-          </>
-        }
+            <View style={tailwind('h-20')}/>
       </ScrollView>
     </View>
   );

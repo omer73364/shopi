@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Image, TouchableOpacity } from 'react-native';
 import Colors from '../styles/Colors'
-import { fonts, margin, row, } from '../styles/Styles'
-import  Search from '../assets/imgs/search.png'
+import { fonts, } from '../styles/Styles'
+import { Ionicons } from '@expo/vector-icons';
+import colors from '../styles/Colors';
 
 
 const Input = (props) =>{
@@ -27,7 +28,7 @@ const Input = (props) =>{
                     style={styles.search}
                     onPress={searchHandler}
                 >
-                    <Image style={{width:20,height:20 }} source={Search} resizeMode="contain" />
+                   <Ionicons name="ios-search" size={18} color={colors.gray}/>
                 </TouchableOpacity>
             }
 
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
         borderRadius:8,
         paddingHorizontal:12,
         paddingVertical:6,
-        flexDirection:row,
+        flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-between',
         marginBottom:12,
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
         flex:1,
         textAlign:'left',
         fontFamily:fonts['regular'],
-        ...margin('right',10)
+        marginRight:10
     },
 
 });

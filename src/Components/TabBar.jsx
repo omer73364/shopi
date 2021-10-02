@@ -69,6 +69,13 @@ export default function MyTabBar({ state, descriptors, navigation }) {
 
                         if(route.name === 'Saved'){
                             params.title = 'Saved'
+                            params.showTabBar = true
+                        }
+
+                        if(route.name === 'Search'){
+                            params.search = true
+                            params.showTabBar = true
+                            // params.title = 'Results'
                         }
 
                         if (!isFocused && !event.defaultPrevented) {
@@ -89,8 +96,8 @@ export default function MyTabBar({ state, descriptors, navigation }) {
                     if (route.name === 'Home'){
                         iconName = 'ios-home'
                     } 
-                    else if (route.name === 'Cart'){
-                        iconName = 'ios-cart';
+                    else if (route.name === 'Search'){
+                        iconName = 'ios-search';
                         size = 22
                     }
                     else if (route.name === 'Saved'){

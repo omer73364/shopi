@@ -24,7 +24,7 @@ export default (props) => {
         <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={tailwind(`ml-4 ${lastItem ? 'mr-4' : ''}`)}>
             <View style={[tailwind('p-0 overflow-hidden bg-white rounded-xl w-32 h-40'),{elevation:0.3}]}>
                 <Image source={item.img} resizeMode="cover" style={tailwind('w-full flex-1 rounded-xl')}/>
-                <ImageBackground source={item.img} blurRadius={40} style={tailwind('mt-2 w-full opacity-95 h-10 items-center justify-center absolute bottom-0 left-0')}>
+                <ImageBackground source={item.img} blurRadius={40} style={tailwind('mt-2 w-full opacity-90 h-10 items-center justify-center absolute bottom-0 left-0')}>
                     <Text text={item.name} style={tailwind('font-bold text-white')}/>
                 </ImageBackground>
             </View>

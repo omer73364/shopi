@@ -27,8 +27,11 @@ const ProductSlider = (props) => {
     }
 
     const listTitle = () => {
+        if(!props.title){
+            return <View style={{height:12}}/>
+        }
         return (
-            <View style={{paddingTop:12}}>
+            <View style={{paddingVertical:12}}>
                 <Title text={props.title} seeAll={false}/>
             </View>
         )
@@ -39,14 +42,15 @@ const ProductSlider = (props) => {
             <FlatList
                 ListHeaderComponent={listTitle}
                 numColumns={2}
-                decelerationRate='normal'
+                decelerationRate={0.95}
                 nestedScrollEnabled = {false}
                 data={props.products}
                 style={[{paddingHorizontal:8},props.style]}
                 keyExtractor={(_,i)=>String(i)}
                 renderItem={renderItem}
-                ListFooterComponent={()=><View style={{height:64}}/>}
+                ListFooterComponent={()=><View style={{height:props.showTabBar ? 64 : 20}}/>}
                 showsVerticalScrollIndicator={false}
+                legacyImplementation={false}
             />
         )
     }

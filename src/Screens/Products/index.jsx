@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { View, Dimensions, StyleSheet, ActivityIndicator } from 'react-native';
 import Constants from 'expo-constants';
 import colors from '../../styles/Colors';
-import IconButton from '../../Components/IconButton';
+import Input from '../../Components/Input';
 import tailwind from 'tailwind-rn';
-import { Ionicons } from '@expo/vector-icons';
 import ProductSlider from '../../Components/ProductSlider';
 import { useStore } from '../../Store';
+import { FakeProducts } from '../../constants';
+import HeadBar from '../../Components/HeadBar';
+import { Ionicons } from '@expo/vector-icons';
+import Text from '../../Components/Text';
 
 const { width, height } = Dimensions.get('screen')
 
@@ -18,107 +21,20 @@ function ProductsScreen({ navigation, route }) {
 
   const setRoute = useStore(state=>state.setRoute)
 
-  const [products,setProducts] = useState([
-    {
-      id:'0',
-      name: 'Name 1',
-      img: require('../../assets/imgs/3.jpg'),
-      price: "12",
-      saved: true
-    },
-    {
-      id:'1',
-      name: 'Name 2',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "20",
-      saved: true
-    },
-    {
-      id:'2',
-      name: 'Name 3',
-      img: require('../../assets/imgs/3.jpg'),
-      price: "39",
-      saved: true
-    },
-    {
-      id:'3',
-      name: 'Name 4',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "440",
-      saved: true
-    },
-    {
-      id:'4',
-      name: 'Name 4',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "20",
-      saved: true
-    },
-    {
-      id:'5',
-      name: 'Name 3',
-      img: require('../../assets/imgs/3.jpg'),
-      price: "39",
-      saved: true
-    },
-    {
-      id:'6',
-      name: 'Name 4',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "440",
-      saved: true
-    },
-    {
-      id:'7',
-      name: 'Name 2',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "20",
-      saved: true
-    },
-    {
-      id:'8',
-      name: 'Name 3',
-      img: require('../../assets/imgs/3.jpg'),
-      price: "39",
-      saved: true
-    },
-    {
-      id:'9',
-      name: 'Name 4',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "440",
-      saved: true
-    },
-    {
-      id:'10',
-      name: 'Name 2',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "20",
-      saved: true
-    },
-    {
-      id:'11',
-      name: 'Name 3',
-      img: require('../../assets/imgs/3.jpg'),
-      price: "39",
-      saved: true
-    },
-    {
-      id:'12',
-      name: 'Name 4',
-      img: require('../../assets/imgs/4.jpg'),
-      price: "440",
-      saved: true
-    },
-  ])
+  const [products,setProducts] = useState([])
 
-  const [loading,setLoading] = useState(true)
+  const [loading,setLoading] = useState(false)
   
-  useEffect(()=>{
+  const getProducts = () => {
     setLoading(true)
     setTimeout(() => {
+      setProducts([...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,])
       setLoading(false)
     }, 500);
+  }
+  useEffect(()=>{
+    if(!route.params.search)
+      getProducts()
     const unsubscribe = navigation.addListener('focus', () => {
         setRoute('Products')
     });
@@ -130,25 +46,37 @@ function ProductsScreen({ navigation, route }) {
   return (
     <View style={styles.screen}>
 
-      <View style={[tailwind('w-full flex-row px-4 border-b pb-3 items-center justify-between'),{borderColor: colors.gray+'4f'}]}>
-        
-        <IconButton>
-          <Ionicons name="ios-menu" size={18} color={colors.black}/>
-        </IconButton>
-      
-        {/* <Text>Shopi</Text> */}
+      <HeadBar noBorder={route.params.search}/>
 
-        <IconButton>
-          <Ionicons name="ios-search" size={18} color={colors.black}/>
-        </IconButton>
-      
-      </View>
+      {
+        route.params.search ?
+        <View style={[tailwind('w-full px-4 items-center justify-center mt-2'),{borderColor:colors.gray+'4f',borderBottomWidth:0.2}]}>
+          <Input
+            placeholder="Find what you want"
+            search={true}
+            inputStyle={tailwind('rounded-lg px-4')}
+            onSearch={(text)=>alert(text)} 
+          />
+        </View> : null
+      }
     
       {
         loading ?
         <ActivityIndicator size={32} color={colors.primary} style={[tailwind('items-center justify-center'),{height:height-200}]}/>
         :
-        <ProductSlider title={route.params.title} products={products} vertical/>
+        products.length ?
+        <ProductSlider title={route.params.title} showTabBar={route.params.showTabBar}  products={products} vertical/>
+        : 
+        route.params.search ?
+        <View style={[tailwind('w-full flex-1 pb-32 items-center justify-center')]}>
+          <Ionicons name="ios-search-outline" size={72} color={colors.gray+'4f'}/>
+          <Text text="Search for something.." style={{color:colors.gray+'4f',fontSize:20,marginTop:20}}/>
+        </View>
+        : 
+        <View style={[tailwind('w-full flex-1 pb-32 items-center justify-center')]}>
+          <Text text="No Items    ):" style={{color:colors.gray+'4f',fontSize:20,marginTop:20}}/>
+        </View>
+
       }
 
     </View>
