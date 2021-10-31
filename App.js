@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, I18nManager, } from 'react-native';
+import React, { useState } from 'react';
+import { I18nManager, AsyncStorage, } from 'react-native';
 import Navigation from './src/Navigation'
-import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import colors from './src/styles/Colors';
 import { useStore } from './src/Store';
@@ -12,22 +11,34 @@ I18nManager.allowRTL(false);
 
 export default function App() {
 
-  const route = useStore(state=>state.routeName)
+  const [loading,setLoading] = useState(false)
+  const [onboardDone,setOnboardDone] = React.useState(null)
 
-  const fontsLoaded = true
+  const loggedUser = useStore(state=>state.loggedUser)
+  const setLoggedUser = useStore(state=>state.setLoggedUser)
+  const refresh = useStore(state=>state.refresh)
 
-  // let [fontsLoaded] = useFonts({
-  //   'regular': require('./src/assets/fonts/'),
-  //   'italic': require('./src/assets/fonts/Montserrat-Italic.ttf'),
-  //   'bold': require('./src/assets/fonts/Montserrat-Bold.ttf'),
-  //   'MontserratSemiBold': require('./src/assets/fonts/Montserrat-SemiBold.ttf'),
-  // });
+  React.useEffect(()=>{
+    setLoading(true)
+    AsyncStorage.getItem('onboardDone').then(res=>{
+      setOnboardDone(res)
+      AsyncStorage.getItem('loggedUser').then(user=>{
+        setLoggedUser(JSON.parse(user))
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
+    })
+  },[refresh])
+
+  // AsyncStorage.removeItem('onboardDone')
+  // AsyncStorage.removeItem('loggedUser')
 
   return (
     <>
       <StatusBar style="dark" backgroundColor={colors.secondary}/>
       {
-        (!fontsLoaded) ? <AppLoading /> : <Navigation/>
+        (loading) ? <AppLoading /> : <Navigation onboardDone={onboardDone} loggedUser={loggedUser}/>
       }
     </>
   );

@@ -1,27 +1,39 @@
 import React from 'react'
-import { View, FlatList, } from 'react-native';
+import { View, FlatList, Pressable, } from 'react-native';
 import Title from './Title';
 import VerticalCard from './VerticalCard';
 import { useNavigation } from '@react-navigation/native'
+import HorizontalCard from './HorizontalCard';
+import { Ionicons } from '@expo/vector-icons';
+import Text from './Text';
+import tailwind from 'tailwind-rn';
+import colors from '../styles/Colors';
+import { useStore } from '../Store';
+import { width } from '../styles/Styles';
 
 
 const ProductSlider = (props) => {
 
-    const navigation = useNavigation()
+    const Toast = useStore(state=>state.Toast)
 
     const renderItem = ({item,index}) => {
-
-        const pressHandler = () => {
-            navigation.navigate('ProductDetails', {product: item})
-        }
-
         return (
             <VerticalCard 
-                save={props.save}
                 item={item}
-                onPress={pressHandler}
                 horizontalMode={!props.vertical}
                 lastItem={index === props.products.length-1}
+            />
+        )
+    }
+
+    const renderCartItem = ({item,index}) => {
+        return (
+            <HorizontalCard 
+                item={item.product}
+                size={item.size}
+                color={item.color}
+                quantity={item.quantity}
+                index={index}
             />
         )
     }
@@ -37,9 +49,34 @@ const ProductSlider = (props) => {
         )
     }
 
-    if(props.vertical){
-        return(
+    const renderCheckoutButton = ()=>
+        <View style={[tailwind('h-10 rounded-lg mt-4 mb-4 items-center self-center justify-center'),{backgroundColor:colors.primary,elevation:0.6,width:width-32}]}>
+            <Pressable onPress={()=>Toast('No payment method in the app!')} style={tailwind('w-full h-full flex-row items-center justify-center')} android_ripple={{color:'rgba(0,0,0,0.1)',borderless:true}}>
+                <Ionicons name="ios-card" size={20} color='#fff'/>
+                <Text text="Check out" style={{fontSize:16,fontWeight:'bold',color:'#fff',textAlign:'left',marginLeft:10}}/>
+            </Pressable>
+        </View>
+
+    if(props.cart){
+        return (
             <FlatList
+                ListHeaderComponent={listTitle}
+                decelerationRate={0.95}
+                nestedScrollEnabled = {false}
+                data={props.products}
+                keyExtractor={(_,i)=>String(i)}
+                renderItem={renderCartItem}
+                ListFooterComponent={renderCheckoutButton}
+                showsVerticalScrollIndicator={false}
+                legacyImplementation={false}
+            />
+        )
+    }
+
+    if(props.vertical){
+        return (
+            <FlatList
+                // decelerationRate='fast'
                 ListHeaderComponent={listTitle}
                 numColumns={2}
                 decelerationRate={0.95}

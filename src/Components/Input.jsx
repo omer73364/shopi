@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Image, TouchableOpacity } from 'react-native';
-import Colors from '../styles/Colors'
 import { fonts, } from '../styles/Styles'
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../styles/Colors';
@@ -14,12 +13,15 @@ const Input = (props) =>{
         <View style={[styles.container,props.inputStyle]}>
 
             <TextInput
-                onChangeText={text => setSearchText(text)}
+                onChangeText={text => {setSearchText(text);props?.onInput && props.onInput(text)}}
                 onSubmitEditing={searchHandler}
                 style={styles.input} 
                 placeholder={props.placeholder || "placeholder"} 
-                placeholderTextColor={Colors.secondary[500]}
-                defaultValue={props.searchText || searchText}
+                placeholderTextColor={colors.gray+'6f'}
+                defaultValue={props.searchText || props.defaultValue || searchText}
+                secureTextEntry={props.hidden}
+                keyboardType={props.type || 'default'}
+                editable={!props.disabled}
             />
             
             { 
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
     },
     
     input:{
-        color:Colors.secondary[900],
+        color:colors.secondary[900],
         fontSize:14,
         flex:1,
         textAlign:'left',

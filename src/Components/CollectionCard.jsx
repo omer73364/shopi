@@ -12,7 +12,7 @@ export default (props) => {
         onPress = () => alert(item.id),
         item = {
             id:'0',
-            img: require('../assets/imgs/1.jpg'),
+            img: require('../assets/imgs/1.png'),
             name: 'Name',
             price: "0",
             saved: false

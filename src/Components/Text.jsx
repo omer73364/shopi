@@ -8,11 +8,11 @@ export default (props) => {
         onPress, 
         text = '' ,
         weight = 'regular', 
-        style = {}
+        style = {},
     } = props
 
     return (
-        <Text onPress={onPress} style={[{fontFamily:fonts[weight]},style]}>
+        <Text onPress={onPress} style={[{fontFamily:fonts[weight]},style]} {...props}>
             { text }
         </Text>
     )

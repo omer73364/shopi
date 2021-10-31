@@ -15,10 +15,7 @@ const { width, height } = Dimensions.get('screen')
 
 function ProductsScreen({ navigation, route }) {
 
-  const navigate = (route,params) => {
-    navigation.navigate(route,params)
-  }
-
+  const SavedProducts = useStore(state=>state.savedData)
   const setRoute = useStore(state=>state.setRoute)
 
   const [products,setProducts] = useState([])
@@ -26,11 +23,7 @@ function ProductsScreen({ navigation, route }) {
   const [loading,setLoading] = useState(false)
   
   const getProducts = () => {
-    setLoading(true)
-    setTimeout(() => {
-      setProducts([...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,...FakeProducts,])
-      setLoading(false)
-    }, 500);
+    setProducts(route.params.title === 'Saved' ? SavedProducts : FakeProducts)
   }
   useEffect(()=>{
     if(!route.params.search)
@@ -41,12 +34,12 @@ function ProductsScreen({ navigation, route }) {
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  },[navigation,route.params.title])
+  },[navigation,route.params.title,SavedProducts])
 
   return (
     <View style={styles.screen}>
 
-      <HeadBar noBorder={route.params.search}/>
+      <HeadBar noBorder={route.params.search} back/>
 
       {
         route.params.search ?
@@ -68,13 +61,14 @@ function ProductsScreen({ navigation, route }) {
         <ProductSlider title={route.params.title} showTabBar={route.params.showTabBar}  products={products} vertical/>
         : 
         route.params.search ?
-        <View style={[tailwind('w-full flex-1 pb-32 items-center justify-center')]}>
+        <View style={[tailwind('w-full flex-1 pb-32 mt-12 items-center justify-center')]}>
           <Ionicons name="ios-search-outline" size={72} color={colors.gray+'4f'}/>
           <Text text="Search for something.." style={{color:colors.gray+'4f',fontSize:20,marginTop:20}}/>
         </View>
         : 
-        <View style={[tailwind('w-full flex-1 pb-32 items-center justify-center')]}>
-          <Text text="No Items    ):" style={{color:colors.gray+'4f',fontSize:20,marginTop:20}}/>
+        <View style={[tailwind('w-full flex-1 pb-32 mt-12 items-center justify-center')]}>
+          <Ionicons name="ios-heart-dislike" size={72} color={colors.gray+'4f'}/>
+          <Text text="No Items" style={{color:colors.gray+'4f',fontSize:20,marginTop:20}}/>
         </View>
 
       }

@@ -3,8 +3,6 @@ import { View, Dimensions, StyleSheet, ScrollView, ActivityIndicator, Animated }
 import Constants from 'expo-constants';
 import colors from '../../styles/Colors';
 import tailwind from 'tailwind-rn'
-import { Ionicons } from '@expo/vector-icons';
-import IconButton from '../../Components/IconButton';
 import Title from '../../Components/Title';
 import ProductSlider from '../../Components/ProductSlider';
 import CollectionSlider from '../../Components/CollectionSlider';
@@ -37,13 +35,7 @@ function HomeScreen({ navigation }) {
   const setRoute = useStore(state=>state.setRoute)
   const Toast = useStore(state=>state.Toast)
 
-  const [loading,setLoading] = useState(true)
-
   const saveProduct = (index) => {
-    const temp = [...newArrival]
-    temp[index].saved = !temp[index].saved
-    setNewArrival(temp)
-    if(temp[index].saved)
       Toast('Product saved ✓')
   } 
 
@@ -69,6 +61,7 @@ function HomeScreen({ navigation }) {
       <HeadBar/>
 
       <ScrollView style={tailwind('pt-2')} showsVerticalScrollIndicator={false}>
+        
           <Title text="New Arrival" onPress={()=>navigate('Products',{title:'New Arrival'})}/>
           {
             !newArrival.length
@@ -76,7 +69,7 @@ function HomeScreen({ navigation }) {
             <ActivityIndicator size={32} color={colors.primary} style={tailwind('items-center h-72 justify-center')}/>
             : 
             <Animated.View style={[tailwind('w-full relative'),{right:slideCards}]}>
-              <ProductSlider products={newArrival} save={saveProduct}/>
+              <ProductSlider products={newArrival}/>
             </Animated.View>
           }
 

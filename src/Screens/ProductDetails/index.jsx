@@ -13,15 +13,11 @@ const { width, height } = Dimensions.get('screen')
 
 function ProductDetailsScreen({ navigation, route }) {
 
-  const navigate = (route,params) => {
-    navigation.navigate(route,params)
-  }
-
   const sizePosition = React.useRef(new Animated.Value(-160)).current;
-  const colorsPosition = React.useRef(new Animated.Value(-200)).current;
+  const colorsPosition = React.useRef(new Animated.Value(-220)).current;
   const imgPosition = React.useRef(new Animated.Value(-300)).current;
   const imgSize = React.useRef(new Animated.Value(0.90)).current;
-  const addPosition = React.useRef(new Animated.Value(-200)).current;
+  const addPosition = React.useRef(new Animated.Value(-220)).current;
 
   const setSizePosition = (value) => {
     Animated.timing(sizePosition, {
@@ -74,6 +70,8 @@ function ProductDetailsScreen({ navigation, route }) {
     }, 600);
   }
 
+  const setNewInCart = useStore(state=>state.setNewInCart)
+  const addToCartMethod = useStore(state=>state.addToCart)
   const setRoute = useStore(state=>state.setRoute)
   const Toast = useStore(state=>state.Toast)
 
@@ -108,6 +106,15 @@ function ProductDetailsScreen({ navigation, route }) {
   const addToCart = () => {
       if((color && size)){
         //   do
+        Toast('Added to cart');
+        setAddPosition(-220)
+        addToCartMethod({
+          product,
+          color,
+          size,
+          quantity
+        })
+        setNewInCart(true)
       }
       else {
         Toast('Select color and size')
@@ -138,6 +145,7 @@ function ProductDetailsScreen({ navigation, route }) {
     setTimeout(() => {
       setLoading(false)
     }, 500);
+    
     const unsubscribe = navigation.addListener('focus', () => {
         setRoute('ProductDetails')
     });
@@ -148,7 +156,7 @@ function ProductDetailsScreen({ navigation, route }) {
 
   return (
   <>
-    <Pressable onPress={()=>setAddPosition(-200)} style={styles.screen}>
+    <Pressable onPress={()=>setAddPosition(-220)} style={styles.screen}>
 
       <HeadBar back/>
 
@@ -211,7 +219,7 @@ function ProductDetailsScreen({ navigation, route }) {
     </Pressable>
 
     {/* Add Card */}
-    <Animated.View style={[tailwind('h-48 rounded-t-3xl items-stretch px-4 py-2 justify-end bg-white absolute left-0'),{width,zIndex:99999,elevation:40.3,bottom:addPosition}]}>
+    <Animated.View style={[tailwind('h-52 rounded-t-3xl items-stretch px-4 py-2 justify-end bg-white absolute left-0'),{width,zIndex:99999,elevation:40.3,bottom:addPosition}]}>
       
       <View style={tailwind('flex-row my-2 justify-center px-10 items-center w-full')}>
         <Text text="Product:"/>
@@ -233,7 +241,7 @@ function ProductDetailsScreen({ navigation, route }) {
         <Text text="Quantity:"/>
         <View style={tailwind('ml-8 flex-row items-center')}>
 
-          <View style={[tailwind('w-6 h-6 rounded-full items-center justify-center'),{backgroundColor:colors.primary}]}>
+          <View style={[tailwind('w-7 h-7 rounded-lg items-center justify-center'),{backgroundColor:colors.primary}]}>
             <Pressable onPress={decrementQuantity} style={tailwind('flex-1 items-center justify-center')} android_ripple={{color:'rgba(0,0,0,0.3',borderless:true}}>
               <Entypo name="minus" size={12} color="#fff"/>
             </Pressable>
@@ -241,7 +249,7 @@ function ProductDetailsScreen({ navigation, route }) {
 
           <Text text={quantity} style={tailwind('mx-6 font-bold')}/>
 
-          <View style={[tailwind('w-6 h-6 rounded-full items-center justify-center'),{backgroundColor:colors.primary}]}>
+          <View style={[tailwind('w-7 h-7 rounded-lg items-center justify-center'),{backgroundColor:colors.primary}]}>
             <Pressable onPress={incrementQuantity} style={tailwind('flex-1 items-center justify-center')} android_ripple={{color:'rgba(0,0,0,0.3',borderless:true}}>
               <Entypo name="plus" size={12} color="#fff"/>
             </Pressable>
@@ -250,8 +258,8 @@ function ProductDetailsScreen({ navigation, route }) {
         </View>
       </View>
 
-      <View style={[tailwind('w-full h-12 rounded-lg mt-4 items-center justify-center'),{backgroundColor:(color && size) ? colors.primary : colors.gray,elevation:0.6}]}>
-        <Pressable onPress={()=>{Toast('Added to cart');setAddPosition(-200)}} style={tailwind('w-full h-full flex-row items-center justify-center')} android_ripple={{color:'rgba(0,0,0,0.1)',borderless:true}}>
+      <View style={[tailwind('w-11/12 h-11 rounded-lg mt-4 mb-2 items-center self-center justify-center'),{backgroundColor:(color && size) ? colors.primary : colors.gray,elevation:0.6}]}>
+        <Pressable onPress={addToCart} style={tailwind('w-full h-full flex-row items-center justify-center')} android_ripple={{color:'rgba(0,0,0,0.1)',borderless:true}}>
             <Ionicons name="ios-cart" size={20} color='#fff'/>
             <Text text="Add to cart" style={{fontSize:16,fontWeight:'bold',color:'#fff',textAlign:'left',marginLeft:10}}/>
         </Pressable>
