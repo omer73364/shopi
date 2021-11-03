@@ -207,7 +207,9 @@ function ProductDetailsScreen({ navigation, route }) {
             </View>
             <View style={[tailwind('flex-1 rounded-lg items-center justify-center'),{backgroundColor:(color && size) ? colors.primary : colors.gray,elevation:0.6}]}>
                 <Pressable onPress={()=>setAddPosition(0)} style={tailwind('w-full h-full flex-row items-center justify-center')} android_ripple={{color:'rgba(0,0,0,0.1)',borderless:true}}>
-                    <Ionicons name="ios-cart" size={20} color='#fff'/>
+                    <View style={tailwind('w-8 h-8 rounded-full bg-white bg-opacity-20 items-center justify-center')}>
+                      <Ionicons name="ios-cart" size={20} color='#fff'/>
+                    </View>
                     <Text text="Add to cart" style={{fontSize:16,fontWeight:'bold',color:'#fff',textAlign:'left',marginLeft:10}}/>
                 </Pressable>
             </View>
@@ -260,7 +262,9 @@ function ProductDetailsScreen({ navigation, route }) {
 
       <View style={[tailwind('w-11/12 h-11 rounded-lg mt-4 mb-2 items-center self-center justify-center'),{backgroundColor:(color && size) ? colors.primary : colors.gray,elevation:0.6}]}>
         <Pressable onPress={addToCart} style={tailwind('w-full h-full flex-row items-center justify-center')} android_ripple={{color:'rgba(0,0,0,0.1)',borderless:true}}>
+          <View style={tailwind('w-8 h-8 rounded-full bg-white bg-opacity-20 items-center justify-center')}>
             <Ionicons name="ios-cart" size={20} color='#fff'/>
+          </View>
             <Text text="Add to cart" style={{fontSize:16,fontWeight:'bold',color:'#fff',textAlign:'left',marginLeft:10}}/>
         </Pressable>
       </View>

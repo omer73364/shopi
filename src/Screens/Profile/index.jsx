@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, ScrollView, Image, Pressable, TouchableOpacity, Animated } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, ScrollView, Image, Pressable, TouchableOpacity, Animated, Linking } from 'react-native';
 import tailwind from 'tailwind-rn';
 import Constants from 'expo-constants';
 import HeadBar from '../../Components/HeadBar';
@@ -84,6 +84,16 @@ const ProfileScreen = ({ navigation }) => {
       pickImage()
     }, 250);
   }
+
+  const openLink = (url) => {
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        Toast("Can't open the URL!");
+      }
+    });
+  }
     
   useEffect(()=>{
 
@@ -157,8 +167,11 @@ const ProfileScreen = ({ navigation }) => {
                 source={logo}
                 resizeMode="contain"
               />
+              <Text text={'Shopi is an open source e-commerce app developed for practicing purpose using React Native, the UI is based on some shots from'} style={[tailwind('text-center px-2 text-sm'),{color:colors.black}]}>
+                <Text onPress={()=>openLink('https://dribbble.com/shots/15960381-Clothing-E-commerce-App')} text={'dribbble'} style={[tailwind('text-center px-2 text-sm'),{color:colors.primary}]}/>
+              </Text>
               
-              <Text text={'Shopi is an open source e-commerce app developed for parcticing purpose using React Native, the UI is based on some shots from dribbble.\n_______________\n\n developed with love by:'} style={[tailwind('text-center px-2 text-sm'),{color:colors.black}]}/>
+              <Text text={'\n_______________\n\n developed with love by:'} style={[tailwind('text-center px-2 text-sm'),{color:colors.black}]}/>
               
               {/* Developer */}
               <Image
@@ -174,19 +187,19 @@ const ProfileScreen = ({ navigation }) => {
             {/* Links */}
             <View style={tailwind('flex-row w-full mt-7 mb-4 items-center justify-around')}>
             
-              <TouchableOpacity onPress={()=>alert('sd')}>
+              <TouchableOpacity onPress={()=>openLink('mailto:anwar733649039@gmail.com')}>
                 <Ionicons name="ios-mail" size={20} color={colors.gray} />
               </TouchableOpacity>
               
-              <TouchableOpacity onPress={()=>alert('sd')}>
+              <TouchableOpacity onPress={()=>openLink('https://t.me/omer73364')}>
                 <Entypo name="paper-plane" size={20} color={colors.gray} />
               </TouchableOpacity>
               
-              <TouchableOpacity onPress={()=>alert('sd')}>
+              <TouchableOpacity onPress={()=>openLink('https://linkedin.com/in/omer73364')}>
                 <Ionicons name="ios-logo-linkedin" size={20} color={colors.gray} />
               </TouchableOpacity>
               
-              <TouchableOpacity onPress={()=>alert('sd')}>
+              <TouchableOpacity onPress={()=>openLink('https://github.com/omer73364')}>
                 <Ionicons name="ios-logo-github" size={20} color={colors.gray} />
               </TouchableOpacity>
             

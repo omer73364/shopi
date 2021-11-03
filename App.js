@@ -26,7 +26,9 @@ export default function App() {
         setLoggedUser(JSON.parse(user))
       })
       .finally(()=>{
-        setLoading(false)
+        setTimeout(() => {
+          setLoading(false)
+        }, 400);
       })
     })
   },[refresh])

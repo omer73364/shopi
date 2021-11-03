@@ -33,15 +33,10 @@ function HomeScreen({ navigation }) {
   };
 
   const setRoute = useStore(state=>state.setRoute)
-  const Toast = useStore(state=>state.Toast)
-
-  const saveProduct = (index) => {
-      Toast('Product saved ✓')
-  } 
 
   useEffect(()=>{
     setTimeout(() => {
-      setNewArrival(FakeProducts)
+      setNewArrival(FakeProducts['newarrival'])
       setSlideCards(0)
       setTimeout(() => {
         setCollection(fakeCollections)

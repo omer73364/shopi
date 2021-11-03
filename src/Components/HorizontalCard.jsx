@@ -51,7 +51,7 @@ const HorizontalCard = (props) => {
                 <Text text={`Size:  ${size}`} style={{...tailwind('text-sm text-left'),color:colors.gray}}/>
                 <Text text={`Quantity:  ${quantity}`} style={{...tailwind('text-sm text-left'),color:colors.gray}}/>
                 <Text text={`Price:  $${item.price*quantity}`} style={{...tailwind('text-sm text-left font-bold mt-2'),color:colors.black}}/>
-                <View style={[tailwind('w-8 h-8 absolute bottom-2 z-50 right-0 top-0 rounded-lg items-center justify-center'),{elevation:0.4,backgroundColor:colors.secondary}]}>
+                <View style={[tailwind('w-8 h-8 absolute z-50 right-1.5 top-0 rounded-lg items-center justify-center'),{elevation:0.4,backgroundColor:colors.secondary}]}>
                     <Pressable 
                         onPress={remove}
                         style={tailwind('w-full h-full items-center justify-center')}

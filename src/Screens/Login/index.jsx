@@ -27,8 +27,12 @@ function LoginScreen({ navigation, route }) {
     }
 
     AsyncStorage.setItem('loggedUser',JSON.stringify(user)).then(()=>{
-      Toast('Welcome Omer')
-      setRefresh()
+      setLoading(true)
+      setTimeout(() => {
+        setLoading(false)
+        Toast('Welcome Omer')
+        setRefresh()
+      }, 600);
     })
   }
   

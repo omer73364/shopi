@@ -18,16 +18,28 @@ function ProductsScreen({ navigation, route }) {
   const SavedProducts = useStore(state=>state.savedData)
   const setRoute = useStore(state=>state.setRoute)
 
+  const Toast = useStore(state=>state.Toast)
+
   const [products,setProducts] = useState([])
 
   const [loading,setLoading] = useState(false)
   
   const getProducts = () => {
-    setProducts(route.params.title === 'Saved' ? SavedProducts : FakeProducts)
+    
+    setProducts(route.params.title === 'Saved' ? SavedProducts : FakeProducts[route.params.title.replace(' ','').toLowerCase()])
+    
+    if(route.params.title !== 'Saved'){
+      setLoading(true)
+      setTimeout(() => {
+        setLoading(false)
+      }, 600);
+    }
+    
   }
   useEffect(()=>{
     if(!route.params.search)
       getProducts()
+      
     const unsubscribe = navigation.addListener('focus', () => {
         setRoute('Products')
     });
@@ -48,7 +60,7 @@ function ProductsScreen({ navigation, route }) {
             placeholder="Find what you want"
             search={true}
             inputStyle={tailwind('rounded-lg px-4')}
-            onSearch={(text)=>alert(text)} 
+            onSearch={(text)=>Toast(`Need backend to search for ${text}`)} 
           />
         </View> : null
       }
@@ -58,18 +70,18 @@ function ProductsScreen({ navigation, route }) {
         <ActivityIndicator size={32} color={colors.primary} style={[tailwind('items-center justify-center'),{height:height-200}]}/>
         :
         products.length ?
-        <ProductSlider title={route.params.title} showTabBar={route.params.showTabBar}  products={products} vertical/>
+          <ProductSlider title={route.params.title} showTabBar={route.params.showTabBar}  products={products} vertical/> 
         : 
         route.params.search ?
-        <View style={[tailwind('w-full flex-1 pb-32 mt-12 items-center justify-center')]}>
-          <Ionicons name="ios-search-outline" size={72} color={colors.gray+'4f'}/>
-          <Text text="Search for something.." style={{color:colors.gray+'4f',fontSize:20,marginTop:20}}/>
-        </View>
+          <View style={[tailwind('w-full flex-1 pb-32 mt-12 items-center justify-center')]}>
+            <Ionicons name="ios-search-outline" size={72} color={colors.gray+'4f'}/>
+            <Text text="Search for something.." style={{color:colors.gray+'4f',fontSize:20,marginTop:20}}/>
+          </View>
         : 
-        <View style={[tailwind('w-full flex-1 pb-32 mt-12 items-center justify-center')]}>
-          <Ionicons name="ios-heart-dislike" size={72} color={colors.gray+'4f'}/>
-          <Text text="No Items" style={{color:colors.gray+'4f',fontSize:20,marginTop:20}}/>
-        </View>
+          <View style={[tailwind('w-full flex-1 pb-32 mt-12 items-center justify-center')]}>
+            <Ionicons name={route.params.title === 'Saved' ? "ios-heart-dislike" : 'ios-shirt'} size={72} color={colors.gray+'4f'}/>
+            <Text text="No Items" style={{color:colors.gray+'4f',fontSize:20,marginTop:20}}/>
+          </View>
 
       }
 

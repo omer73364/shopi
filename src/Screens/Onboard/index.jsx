@@ -42,12 +42,12 @@ function HomeScreen({ navigation }) {
       img: photo1,
     },
     {
-      title:'Shopi 2',
+      title:'New Fashion',
       description:'Ea veniam exercitation eiusmod exercitation sunt exercitation commodo sit.',
       img: photo2,
     },
     {
-      title:'Shopi 3',
+      title:'For All Family',
       description:'Ea veniam exercitation eiusmod exercitation sunt exercitation commodo sit.',
       img: photo3,
     },
@@ -58,11 +58,11 @@ function HomeScreen({ navigation }) {
   const renderSlide = ({item}) => (
     <ImageBackground source={item.img} style={[tailwind('items-center justify-end'),{height,width}]}>
 
-      <View style={[tailwind('absolute w-full h-full bg-opacity-20 top-0 left-0'),{backgroundColor:colors.primary+'1f'}]}/>
-      {item.title === 'Shopi' && <Image source={logo} style={tailwind('h-28 w-28 absolute left-6 top-6')} resizeMode="contain"/>}
+      <View style={[tailwind('absolute w-full h-full bg-opacity-20 top-0 left-0'),{backgroundColor:colors.primary+'3f'}]}/>
+      {item.title === 'Shopi' && <Image source={logo} style={tailwind('h-20 w-20 absolute left-6 top-12')} resizeMode="contain"/>}
       <Text text={item.title} style={[tailwind('text-left w-full px-12 text-3xl font-bold'),{color:'#fff'}]}/>
       <Text text={item.description} style={tailwind('text-base text-left w-full px-12 text-white mt-2')}/>
-      <View style={tailwind('h-24')}/>
+      <View style={tailwind('h-32')}/>
     </ImageBackground>
   )
   const _onViewableItemsChanged = useCallback(({ viewableItems, changed }) => {
@@ -93,7 +93,7 @@ function HomeScreen({ navigation }) {
       />
 
       {/* dots */}
-      <View text={visible} style={tailwind('absolute bottom-4 bg-opacity-10 py-6 left-0 w-full flex-row items-center justify-center')}>
+      <View text={visible} style={tailwind('absolute bottom-4 bg-opacity-10 py-6 left-0 w-full flex-row items-center px-12')}>
         {
           slides.map((_,index)=>
             <Pressable 
@@ -109,16 +109,18 @@ function HomeScreen({ navigation }) {
       </View>
       
       {/* floating action button */}
-      <Pressable 
-        onPress={next} 
+      <View 
         text={visible} 
         style={[
-          tailwind('absolute w-12 h-12 rounded-full bottom-6 right-6 items-center justify-center'),
+          tailwind('absolute w-40 h-12 rounded-lg bottom-6 right-6'),
           {backgroundColor:colors.primary}
         ]}
       >
-        <AntDesign name={visible === 3 ? "check" : "arrowright"} color="#fff" size={20}/>
-      </Pressable>
+        <Pressable onPress={next} style={tailwind('flex-1 flex-row items-center justify-center')} android_ripple={{color:colors.black+'4f',borderless:true}}>
+          <AntDesign name={visible === 3 ? "check" : "arrowright"} color="#fff" size={20} style={tailwind('mr-2 bg-white bg-opacity-20 rounded-full p-1.5')}/>
+          <Text text={'Get Started'} style={[tailwind('text-base font-bold'),{color:'#fff'}]}/>
+        </Pressable>
+      </View>
 
     </View>
   );

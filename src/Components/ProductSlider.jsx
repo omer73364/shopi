@@ -50,9 +50,11 @@ const ProductSlider = (props) => {
     }
 
     const renderCheckoutButton = ()=>
-        <View style={[tailwind('h-10 rounded-lg mt-4 mb-4 items-center self-center justify-center'),{backgroundColor:colors.primary,elevation:0.6,width:width-32}]}>
+        <View style={[tailwind('h-11 rounded-lg mt-4 mb-4 items-center self-center justify-center'),{backgroundColor:colors.primary,elevation:0.6,width:width-32}]}>
             <Pressable onPress={()=>Toast('No payment method in the app!')} style={tailwind('w-full h-full flex-row items-center justify-center')} android_ripple={{color:'rgba(0,0,0,0.1)',borderless:true}}>
-                <Ionicons name="ios-card" size={20} color='#fff'/>
+                <View style={tailwind('w-8 h-8 rounded-full bg-white bg-opacity-20 items-center justify-center')}>
+                    <Ionicons name="ios-card" size={20} color='#fff'/>
+                </View>
                 <Text text="Check out" style={{fontSize:16,fontWeight:'bold',color:'#fff',textAlign:'left',marginLeft:10}}/>
             </Pressable>
         </View>

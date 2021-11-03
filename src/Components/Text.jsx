@@ -7,13 +7,14 @@ export default (props) => {
     const {
         onPress, 
         text = '' ,
+        children = '',
         weight = 'regular', 
         style = {},
     } = props
 
     return (
         <Text onPress={onPress} style={[{fontFamily:fonts[weight]},style]} {...props}>
-            { text }
+            { text } { children }
         </Text>
     )
 }
