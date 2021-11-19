@@ -1,5 +1,6 @@
 {
   "main": "node_modules/expo/AppEntry.js",
+  "description": "Shopi is an open source e-commerce app developed for practicing purpose using React Native. the UI is based on some shots from Dribbble",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
